@@ -340,6 +340,11 @@ def extract_domains(expr):
     domainlist = []
     for t in traverse_unique_terminals(expr):
         domainlist.extend(t.ufl_domains())
+    # FIXME Temporary HACK needed for forms with mixed cell and facet spaces
+    for domain in domainlist:
+        if domain.topological_dimension() == \
+                domain.geometric_dimension():
+            domainlist = [domain]
     return sorted(join_domains(domainlist))
 
 
